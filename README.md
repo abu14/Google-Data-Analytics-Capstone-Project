@@ -3,11 +3,11 @@ This is an analysis on Bellabeat fitbit devices. In order to find insights that 
 
 # Overview
 **Bellabeat** is a high-tech manufacturer of health-focused products for
-woman. As a Junior Analyst for this company. We will be analyzing the
+women. As a Junior Analyst for this company. I will be analyzing the
 **Bellabeat's,** **Fitabase Dataset** for the purpose of this analysis,
 in order to find insights in customer behavior with **Bellabeat's**
-smart devices. . Our primary objective is to provide high-level
-recommendations base on my findings.
+smart devices. . My primary objective is to provide high-level
+recommendations base on the findings.
 
 # Contents
 The **contents** of this analysis will follow the following guidelines.
