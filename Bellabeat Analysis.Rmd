@@ -1,0 +1,864 @@
+---
+title: "Case Study 2: How can a Wellness Technology Company Play it Smart?"
+author: "Abenezer Tesfaye"
+date: '2022-06-14'
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+### Overview
+
+**Bellabeat** is a high-tech manufacturer of health-focused products for
+woman. As a Junior Analyst for this company. We will be analyzing the
+**Bellabeat's,** **Fitabase Dataset** for the purpose of this analysis,
+in order to find insights in customer behavior with **Bellabeat's**
+smart devices. . Our primary objective is to provide high-level
+recommendations base on my findings.
+
+### **Contents**
+
+1.  **Ask**
+
+    -   What is the business objective?
+
+    -   Who are the stakeholders?
+
+    -   What data is used for this case study?
+
+2.  **Prepare**
+
+    -   What Data is being Used
+
+    -   Check for Data Bias
+
+    -   Check for data Integrity & Credibility
+
+3.  **Process**
+
+    -   Check for Duplicate Values
+
+    -   Check for Null Values
+
+    -   Check for Irrelevant Data
+
+    -   Change Data Types
+
+    -   Demonstrate the cleaning process
+
+4.  **Analyze**
+
+    -   Organize data
+
+    -   Aggregate the data
+
+    -   Format the data
+
+    -   Perform calculations Identify trends
+
+5.  **Share**
+
+    -   Demonstrate your key findings
+
+    -   Present findings with Visualizations
+
+6.  **Act**
+
+    -   Summarize Findings
+
+    -   Provide High-level Recommendations
+
+## **Part 1: Ask**
+
+Let's first begin with identifying the business task, & who the
+stakeholders are in this case study.
+
+**a. Business Task**
+
+The *goal* of this case study is to
+
+-   Identify the trends in smart device usage?
+
+-   How could these trends could apply to Bellabeat customers?
+
+-   How could these trends help influence Bellabeat marketing strategy?
+
+**b. Stake Holders**
+
+-   Urška Sršen - CEO & Co-founder of Bellabeat
+
+-   Sando Mur - CCO & Co-founder of Bellabeat
+
+-   Bellabeat Marketing Analytics team
+
+**c. Data**
+
+In this case study, the public dataset "FitBit Fitness Tracker Data
+from" \<(<https://www.kaggle.com/arashnic/fitbit>)\> will be used. This
+dataset is collected from 30 consenting **Bellabeat** customers.
+
+## **Part 2: Prepare**
+
+Before cleaning and organizing the data, it is necessary to prepare the
+data appropriately. Thus, We are going to check for data bias, determine
+credibility, limitation, or constraints of the data.
+
+### **1. Checking the Data**
+
+This dataset is obtained for the public dataset ***"Fitbit Fitness
+Tracker Data"*** from **Kaggle**. Furthermore, this data set does not
+infringe on respondents privacy. As all 30 eligible **Fitbit** users had
+consented to their data to be tracked.
+
+The data in use would of a wide format as there are one observation row
+per subject with each measurement present as a different variable.
+
+**Sorting & Filtering**
+
+Before loading up the data we are using for the analysis. Let us first
+make use of the necessary libraries needed for this activity.
+
+```{r}
+library(tidyverse)  #For design, grammar, & structure
+library(ggplot2)     #For the purpose creating Visuals
+library(dplyr)       #To manipulate the data
+library(lubridate)   #To manipulate dates
+```
+
+Now Let's load our dataset. The entire dataset includes 18 files.
+However, for the purpose of this analysis we are going to use three
+datasets.
+
+-   dailyActivity_merged.csv
+
+-   dailyCalories_merged.csv
+
+-   sleepDay_merged.csv
+
+-   weightLogInfo_merged.csv
+
+1.  **Daily Activity**
+
+```{r}
+    #Let's import and store data to our environment
+    daily_activity <- read_csv("dailyActivity_merged.csv")
+```
+
+2.  **Daily Calories**
+
+    ```{r }
+    #Let's import and store data to our environment
+    daily_calories <- read_csv("dailyCalories_merged.csv")  
+    ```
+
+3.  **Sleep Day**
+
+    ```{r}
+    #Let's import & store the data to our environment.
+    sleep_day <- read_csv("sleepDay_merged.csv")
+
+    ```
+
+4.  **Weight Log Info**
+
+    ```{r}
+    #Let's import & store the data to our environment.
+    weight_log_info <- read.csv("weightLogInfo_merged.csv")
+    ```
+
+**Let's get a look at each of our tables**
+
+```{r}
+glimpse(daily_activity)
+
+```
+
+The table contains 940 Rows & 15 Columns
+
+```{r}
+glimpse(daily_calories)
+```
+
+The table contains 940 Rows & 3 Columns.
+
+```{r}
+glimpse(sleep_day)
+```
+
+The table contains 413 Rows & 5 Columns.
+
+```{r}
+glimpse(weight_log_info)
+```
+
+The table contains 67 Rows & 8 Columns.
+
+### **2. Check for Data Bias & Credibility**
+
+We are going to be using the **ROCCC** method to check the four our data
+bias.
+
+**Reliable** to a reasonable degree as it is gained from a public
+dataset. However, the it is collected from willing participants.
+
+**Original** since the data comes from Bellabeat's customers, and
+measured using company trusted smart devices. It is also reasonable to
+say the data is in fact *Original*.
+
+**Comprehensive** the dataset can not be called comprehensive as it only
+accounts for only 30 participants.
+
+**Current** the data is not current as the time of last update was
+05.12.2016
+
+**Cited** till the time of this writing no information to conclude
+whether or not this data has been cited.
+
+### **3. Check for Integrity**
+
+The limited amount of sample set, and the lack of recent datasets takes
+away from the potential of this work. However, the analysis should
+provide useful insights to Bellabeat customer behaviors.
+
+## Part 3: Prepare
+
+In this part of the analysis process, we will be cleaning the data.
+
+This process will enable us
+
+-   Eliminate Duplicate data
+
+-   Check for null values
+
+-   Check for Irrelevant data
+
+-   Change Data Types
+
+    ### **1. Check for Duplicate Values**
+
+We will be checking if there are any duplicate values for each of the
+three dataset.
+
+```{r}
+noquote("Number of duplicate values in daily_activity")
+sum(duplicated(daily_activity)) 
+```
+
+This particular dataset doesn't have any duplicate files.
+
+```{r}
+noquote("Number of duplicate values in daily_calories.")
+sum(duplicated(daily_calories))
+```
+
+This particular also dataset doesn't have any duplicate files.
+
+```{r}
+noquote("Number of duplicate values in sleep_day.")
+sum(duplicated(sleep_day))
+```
+
+Since this particular tables contains ***three*** duplicate values those
+need to be cleaned.
+
+```{r}
+# Let's double check for duplicate values
+sum(duplicated(sleep_day))
+# Let's remove repeated values from our table
+sleep_day_table <- sleep_day[!duplicated(sleep_day),]
+
+# Now we recheck if our code removed the repeated values.
+sum(duplicated(sleep_day_table))
+```
+
+So, now all we have renamed sleep_day as sleep_day_table. Also, we have
+eliminated all the duplicate rows in our table.
+
+```{r}
+noquote("Number of duplicate values in weight_log_info")
+sum(duplicated(weight_log_info))
+```
+
+We do not have any duplicate values in the weight_log_info table.
+
+### **3. Checking for Null Values**
+
+We will now check if all three of the datasets contain any null values.
+
+```{r}
+#We are going to check using the is.null function
+is.null(daily_activity)
+
+is.null(daily_calories)
+
+is.null(sleep_day_table)
+
+is.null(weight_log_info)
+```
+
+There are no null values in all of the ***Four*** of the datasets. Since
+all the results show ***False***.
+
+### **3. Check for Irrelevant Data**
+
+At first glance we can tell that the ***sleep_day_table*** dataset
+contains a column with time. To make further analysis easier, let's make
+it uniform with others by separating the date segment.
+
+```{r}
+sleep_day_table_updated <- sleep_day_table %>% 
+  separate(SleepDay, c('Date', 'Time'), " ")
+
+weight_log_info_updated <- weight_log_info %>%
+  separate(Date, c('Date', 'Time'), " ")
+
+```
+
+Now, let's rename the columns in daily_activity, daily_calories, &
+sleep_day_table_updated.
+
+Daily Activity Table
+
+```{r}
+# We now rename names of columns to make the process smoother
+
+daily_activity_updated <- rename(daily_activity, Date = "ActivityDate", Steps = "TotalSteps", Distance = "TotalDistance")
+
+
+```
+
+Daily Calories Table
+
+```{r}
+# We now rename names of columns to make the process smoother
+
+daily_calories_updated <- rename(daily_calories, Date = "ActivityDay")
+```
+
+### 4. Changing Data Types
+
+In order to prepare our dataset for further analysis we need to properly
+convert the variables format in to uniform and standard format. The
+***Date*** variable data type is ***chr***, it needs to be converted in
+to ***date*** format.
+
+```{r}
+#Let's convert the data type of the dates.
+daily_activity_updated$Date <- mdy(daily_activity_updated$Date)
+
+daily_calories_updated$Date <- mdy(daily_calories_updated$Date)
+
+sleep_day_table_updated$Date <- mdy(sleep_day_table_updated$Date)
+
+weight_log_info_updated$Date <- mdy(weight_log_info_updated$Date)
+```
+
+## Part 4 & 5: Analyze and Share
+
+In this part of the analysis phase we will summarize our dataset. Make
+use of different statistical tests in order to find trends and insights.
+
+-   Summary of the Data
+
+-   Weekend vs Weekdays Activity
+
+-   Steps vs Average Calories Burnt
+
+-   Analyze Sleep Data
+
+-   Analyze Weight Data
+
+But first let's summarize our dataset. We know the test duration was 30
+days with 33 participants.As there are 33 unique Ids in the
+daily_activity_updated table. Also, There are 8 unique Ids or
+participants in the weight_log_info table.
+
+```{r}
+#Let's determine the participants
+length(unique(daily_activity_updated$Id))
+length(unique(daily_calories_updated$Id))
+length(unique(sleep_day_table_updated$Id))
+length(unique(weight_log_info$Id))
+
+```
+
+Let's also get a quick understanding of the the datasets
+
+### 1. Summary of the Data
+
+Let's first find out in quick calculations: the max & min for these
+values.
+
+```{r}
+max(daily_activity_updated$Steps)
+min(daily_activity_updated$Steps)
+
+```
+
+Maximum Steps of 36019 & Minimum was 0
+
+```{r}
+max(daily_activity_updated$Calories)
+min(daily_activity_updated$Calories)
+```
+
+Maximum Calories 4900 & Minimum was 0
+
+```{r}
+max(sleep_day_table_updated$TotalTimeInBed)
+min(sleep_day_table_updated$TotalTimeInBed)
+```
+
+```{r}
+
+max(sleep_day_table_updated$TotalMinutesAsleep)
+min(sleep_day_table_updated$TotalMinutesAsleep)
+
+```
+
+```{r}
+max(weight_log_info$WeightKg)
+min(weight_log_info$WeightKg)
+```
+
+```{r}
+min(weight_log_info$BMI)
+max(weight_log_info$BMI)
+```
+
+So in quick glance we can tell that there are few entries with the
+values zero. Calories & Steps seem to have zero values. So we need to
+first count how many times zero has been entered.
+
+```{r}
+#This let's us count how many zero values there are.
+daily_activity_updated %>% 
+  count(daily_activity_updated$Calories == 0)
+
+```
+
+So there are Four zero values in the Calories column
+
+```{r}
+
+daily_activity_updated %>% 
+  count(daily_activity_updated$Steps == 0)
+```
+
+So, there 77 entries in the steps column with zero values.
+
+Let's now make a quick summary of our tables to get very good
+understanding of our now clean data.
+
+```{r}
+#Using the sappy function we can do a quick calculation
+sapply(list(daily_activity_updated, daily_calories_updated, sleep_day_table_updated, weight_log_info), summary)
+```
+
+**Quick Summary**
+
+1.  ***daily_activity_updated*** table
+
+***Steps***
+
+-   Minimum Steps taken was 0
+
+-   Maximum Steps taken was 36019
+
+-   Average Steps taken was 7638
+
+***Distance***
+
+-   Minimum Distance traveled was 0
+
+-   Maximum Distance traveled was 28.030
+
+-   Average Distance traveled was 5.490
+
+-   Average very active distance traveled was 1.05
+
+-   Average light active distance traveled was 3.341
+
+-   Average sedentary active distance 0.0016
+
+-   Average very active minutes spent 21.6
+
+-   Average lightly active minutes spent 192.8
+
+-   Average sedentary minutes spent 991
+
+**Insights**
+
+The average steps or exercise of respondents is ***7638*** which is
+equal to ***5.82 km***. Which is in the reasonable range of steps taken
+with adults. However, it is sill widely of the mark of the recommended
+***10,000*** ***steps*** per day. As the data suggests the highest
+activities were recorded were those of light activities. Which tells us
+that most of the time people walk the highest in a leisurely & casual
+manner.
+
+Thus, we can conclude that our participants do not engage with intense
+exercises often. As we can see the average ***VeryActiveMinutes*** spent
+is ***21.6***. As well as the average sedentary minutes spent being
+**991.**
+
+2.  **daily_calories_updated** table
+
+***Calories***
+
+-   Minimum calorie burnt was 0
+
+-   Maximum calorie burnt was 4900
+
+-   Average calorie burnt was 2304
+
+**Insights**
+
+The average calorie's burnt with in the participants was 2304 calories.
+A normal healthy person should be able to burn a calorie amount between
+2000-2500. Therefore, we can say our data suggests the participants have
+a normal metabolism.
+
+3.  **sleep_day_table_updated** table
+
+***Total Minutes Asleep***
+
+-   Minimum minutes slept was 58.0
+
+-   Maximum minutes slept was 796.0
+
+-   Average minutes slept was 419.0
+
+***Total Time In Bed***
+
+-   Minimum time spent in bed was 61.0
+
+-   Maximum time spent in bed was 961.0
+
+-   Average time spent in bed 458.5
+
+**Insights**
+
+The data suggests that the average minutes slept was 419.0 which is the
+equivalent of 7hrs. This suggests the participants have a largely normal
+sleeping habits.
+
+**Weight Log Info**
+
+-   Minimum weight of a respondent was 52.6 kg.
+
+-   Maximum weight of a respondent was 133.50 kg.
+
+-   The average weight of the respondents was 72.04 kg.
+
+-   The average BMI of the respondents was 25.19.
+
+**Insights**
+
+We can tell that the average weight of the group was 72.04 kg, which is
+fairly normal. However, the average BMI of group paints a different
+picture. The average BMI of 25.19 is just above the ideal range. The
+ideal range of BMI being 18.5 - 24.9. So, we can infer that the group is
+classified as ***overweight.***
+
+In order to determine what specific trends and patterns exists let's
+compare the different variables. In order to determine what
+relationships they might have. In order to do so we can compare the
+relationship between:
+
+### **2.** Weekday vs Weekend Activity Analysis
+
+```{r}
+#We create a new table then using the weekdays function we create a new column.
+weekday_activity_table <- daily_activity_updated
+
+weekday_activity_table$weekday <- weekdays(daily_activity_updated$Date)
+
+
+#We then write a function to aggregate or count the weekdays respectively
+aggregate_steps_daily_table <- aggregate(Steps ~ weekday, weekday_activity_table, mean)
+
+aggregate_steps_daily_table$weekday <- ordered(aggregate_steps_daily_table$weekday, 
+                                               levels = c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", 
+                                                           "Saturday", "Sunday"))
+```
+
+Let's now plot our new table
+
+```{r}
+ggplot(aggregate_steps_daily_table, aes(x = weekday, y = Steps)) +
+  geom_bar(stat = "identity", fill ="steelblue") +
+  labs(title= "Total Steps Walked on Average Each Day of the Week", x = "Day of the week", y="Number of Steps")
+
+```
+
+**Correlation Test**
+
+Let's test if there is a correlation between day of the week and steps
+walked!
+
+```{r}
+weekday_activity_table <- weekday_activity_table %>% 
+mutate(weekday_integer=as.numeric(weekday_activity_table$weekday <-
+
+factor(weekday_activity_table$weekday, levels = c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"), ordered = TRUE)))
+
+
+cor.test(weekday_activity_table$Steps, weekday_activity_table$weekday_integer, method = "spearman")
+
+```
+
+**Insights**
+
+-   We can tell through the bar graph that there is not much of a
+    significant difference in activity during the day of the week. All
+    of day of the week achieving a ***7000*** plus average. None the
+    less, Sunday still seems to be the lowest activity day. These can be
+    due to the fact that, Sunday is not a work day.
+
+-   The correlation test was taken to understand the link between the
+    Weekday & Steps taken. From the correlation test done, the
+    ***correlation coefficient*** of ***-0.06810459*** suggests that the
+    number of steps taken by participants decreases from Monday through
+    Sunday. But, seeing the correlation estimate of ***-0.06810459***
+    suggests that there is very little connection.
+
+Thus, we can conclude that the lack of activity is due to personal
+choices. It is rather that they have a very sedentary living habits.
+
+### 3. Steps vs Calories Analysis
+
+Now let's compare the relation ship between the average steps taken &
+the average distance traveled amongst the group.
+
+```{r}
+
+ggplot(data = weekday_activity_table) +
+  geom_point(mapping = aes(x = Steps, y = Calories)) +
+  geom_jitter(mapping = aes(x = Steps, y = Calories), width
+              = 3, size = 1) +
+  geom_smooth(mapping = aes(x = Steps, y = Calories), 
+              method = "loess") +
+  labs(x = "Total Number of Steps Walked Daily", y="Calories Burnt Daily", title = "The Relationship between Calories & Steps Walked Each Day" )
+
+```
+
+**Insights** The analysis tells us that more step do lead to more
+calories burnt. Thus, it is crucial that Bellabeat understand that
+develop features that encourage more habitual walks.
+
+### 4. Analyze Sleep Data
+
+```{r}
+ggplot(data = sleep_day_table_updated) +
+  geom_point(mapping = aes(x = TotalTimeInBed, y = TotalMinutesAsleep), color = "Black") +
+  geom_smooth(mapping = aes(x = TotalTimeInBed, y = TotalMinutesAsleep), width =0.5, color = "Red") +
+  labs(x = "Total Time In Bed", y = "Total Minutes Asleep",title = "Minutes Asleep vs Time Spent In Bed")
+
+```
+
+```{r}
+# Analyzing sleep data some more. 
+ordered_sleep_table_updated <- sleep_day_table_updated %>%
+  mutate(time_taken_to_sleep = TotalTimeInBed - TotalMinutesAsleep)
+
+# Now, that we have calculated & formed a new column. Let's plot our data.
+time_taken_to_sleep_graph <- ggplot(ordered_sleep_table_updated, aes(x = time_taken_to_sleep)) +
+geom_area(stat = "bin", bins = 30) +
+labs(x="Time Taken to Sleep (mins)", y="Number of Occurences",
+     title="Time Taken to Sleep by Respondents") 
+
+#Let's view our graph
+time_taken_to_sleep_graph
+
+
+```
+
+**Insights**
+
+-   It is clear through our findings that minutes spent in bed lead to
+    more minutes slept. The participants all seem to have an easier to
+    going to sleep. However, there are a select few who ***have trouble
+    falling sleep***. As the first plot demonstrates. The red line
+    indicates how the time asleep should be according to the time in bed
+    changes. The points below the trend line suggest some require longer
+    minutes to fall asleep. The are our outliers.
+
+-   Furthermore, the second graph demonstrates further the inability to
+    go to sleep by some participants. Nevertheless, most participants
+    take 0 to 100 minutes falling asleep.
+
+-   We will provide recommendations as to how to better serve these
+    customers.
+
+    ### 5. Analyze Weight Log Data
+
+```{r}
+#Let's Analyze the weight log data, but first let's organize the data.
+sorted_weight_log_info <- weight_log_info_updated[order(weight_log_info_updated$BMI),]
+
+#First Create a category
+underweight_respondents <- sorted_weight_log_info %>% filter(BMI < 18.5)
+overweight_respondents <- sorted_weight_log_info %>% filter(BMI > 24.9)
+obese_respondents <- sorted_weight_log_info %>% filter(BMI > 30)
+                                                       
+#Let's assess the number unique ID's                                                       
+noquote("Total Number of Unique Respondents")
+cat("\n")
+length(unique(sorted_weight_log_info$Id))
+
+#Now Let's check the BMI of the respondents
+noquote("Total Number of Underweight Respondents")
+cat("\n")
+length(unique(underweight_respondents$Id))
+
+noquote("Details of underweight respondents")
+cat("\n")
+underweight_respondents
+cat("\n")
+
+
+noquote("Total Number of Overweight Respondents")
+cat("\n")
+length(unique(overweight_respondents$Id))
+
+noquote("Details of overweight respondents")
+cat("\n")
+overweight_respondents
+cat("\n")
+    
+
+noquote("Total Number of Obese Respondents")
+cat("\n")
+length(unique(overweight_respondents$Id))
+
+noquote("Details of obese respondents")
+cat("\n")
+obese_respondents
+
+```
+
+***Insights***
+
+According to the ***CDC*** the average health adult's **BMI** should be
+between ***18.5 - 24.9***. Link
+<https://www.cdc.gov/healthyweight/assessing/bmi/adult_bmi/index.html>.
+
+-   Our analysis suggests that out of the 8 participants ***0*** were
+    underweight, ***5*** of them being either overweight, ***1*** of the
+    participants being obese. This suggests that our participants have a
+    largely unhealthy life style. The ***average weight*** of
+    participants being ***72 kg***. Also having an average ***BMI*** of
+    ***25.19***.
+
+-   Our sample is small, this might not be the best indicator of the
+    overall **Beallbeat's** customers. However a more extensive studies
+    in to this area is recommended. Such studies could prove to be of
+    great value for future product developments.
+
+## Part 6: Act
+
+In this part of the analysis we will ***summarize*** our finding and
+provide ***high-level recommendations.***
+
+### 1. Summary of Findings.
+
+Throughout this analysis we examined four datasests. Those being daily
+activity, daily calories, daily sleep, & weight of our participants. We
+have put those datasets through multiple test in order to get an
+understanding. Let's look at each of our analysis.
+
+**a. Daily Activity**
+
+So through our analysis we have been able understand the following
+things:
+
+The day of the week doesn't affect the level of activity.
+
+The participants as a group averaged a 7,000+ steps per day. This below
+the recommended 10,000 by medical professionals.
+
+The correlation test between the **Weekday & Steps Taken** was
+performed. The result revealed that the little to no correlation between
+the variables. The correlation coefficient being **-0.06810459**.
+
+**Conclusion**
+
+The participants in this group leed a rather sedentary lifestyle. So,
+our recommendation is going forward to provide customers a challenge
+based gadgets that better encourages activity.
+
+**b. Daily Calories Table**
+
+Again, multiple steps were taken to analyze the data. The analysis
+revealed the following:
+
+We have examined the relationship (correlation) between calories burnt &
+steps walked. The results demonstrate that there is a very positive
+relationship between the two variables.
+
+**Conclusion**
+
+It is possible to say more Steps lead to more Calories Burnt.
+
+**c. Sleep Data**
+
+Our investigation on the sleep habits of our participants revealed the
+following:
+
+Most of the participants have an easier time falling asleep.
+
+However, there are a select few whom have **trouble falling asleep**.
+
+Our first test of the data revealed that it took the participants **0 -
+100** minutes falling asleep. It also demonstrated our **outliers.**
+
+**Conclusions**
+
+The participants all have an easier ability to go to sleep. However,
+there existed a very sizable number of participants with harder time
+falling asleep.
+
+We suggest the Bellabeat marketing team to provide, gadgets to cater to
+these individuals.
+
+**d. Weight Data**
+
+A look in to our participants weight data revealed that:
+
+Most of the participants were either overweight or obese.
+
+The average ***BMI*** of the participants being **25.19**.
+
+**Conclusion**
+
+It is clear that the participants all lead an unhealthy lifestyle.
+
+### 2. Recommendation
+
+Bases on our findings what we recommend to the marketing team is:
+
+The data shows the average \*\*Bellabeat"" customers leads a **very low
+activity** or **sedentary** lifestyle. We suggest that the marketing
+team develop features that suggest more activities. Suggestions such as
+***Take the stairs today!***. The device should also notify the user
+they are below the recommended daily steps which is ***10,000***.
+
+The majority of people using **Bellabeat's smart devices** seem to be
+**overweight**. Therefore, targeting those customers can be of help.
+Build features that come with a recommendation of what time to get
+activities up. Provide **notifications** as to when the customers should
+engage in more active exercises. They should be encourage to track their
+***Weight*** & ***BMI*** more closely.
+
+Also, **advertise** to those with dealing with difficulty of falling
+asleep as well. We recommend the team to develop a sleep routine
+suggestions.
+
+Through these new features it is possible to improve the life of the
+customers. In return being able to have a satisfied customers.
+
+From two angles Improve health & then gain health. since most people in
+america are overweight a more tuned for these majority might increase
+revenue.
